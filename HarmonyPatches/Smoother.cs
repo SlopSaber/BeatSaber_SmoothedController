@@ -10,9 +10,17 @@ using UnityEngine.XR;
 
 namespace SmoothedController.HarmonyPatches {
 	class wrapper {
+		public readonly Transform controllerTransform;
+		public readonly bool shouldSmooth;
 		public Vector3 smoothedPosition = Vector3.zero;
 		public Quaternion smoothedRotation = Quaternion.identity;
 		public float angleVelocitySnap = 1f;
+
+		public wrapper(VRController controller) {
+			controllerTransform = controller.transform;
+			var controllerName = controller.gameObject.name;
+			shouldSmooth = controllerName.Length > 0 && controllerName[0] == 'C';
+		}
 	}
 
 	[HarmonyPatch(typeof(VRController), "Update")]
@@ -27,9 +35,6 @@ namespace SmoothedController.HarmonyPatches {
 			= new ConditionalWeakTable<VRController, wrapper>();
 
 		static void Postfix(VRController __instance) {
-			if(__instance.gameObject.name[0] != 'C')
-				return;
-
 			if(!enabled || !PluginConfig.Instance.Enabled)
 				return;
 
@@ -39,10 +44,14 @@ namespace SmoothedController.HarmonyPatches {
 				return;
 
 			if(!mapper.TryGetValue(__instance, out var wrapperI))
-				mapper.Add(__instance, wrapperI = new wrapper());
+				mapper.Add(__instance, wrapperI = new wrapper(__instance));
 
-			var pos = __instance.transform.localPosition;
-			var rot = __instance.transform.localRotation;
+			if(!wrapperI.shouldSmooth)
+				return;
+
+			var controllerTransform = wrapperI.controllerTransform;
+			var pos = controllerTransform.localPosition;
+			var rot = controllerTransform.localRotation;
 
 			var angDiff = Quaternion.Angle(wrapperI.smoothedRotation, rot);
 			wrapperI.angleVelocitySnap = Math.Min(wrapperI.angleVelocitySnap + angDiff, 90f);
@@ -67,7 +76,7 @@ namespace SmoothedController.HarmonyPatches {
 				Console.WriteLine("Smoothing {0}. Targetpos {1}\tSmoothedPos {2}\tposSmooth {3}\tsnapMulti {4}", __instance.gameObject.name, pos, wrapperI.smoothedPosition, posSmooth, snapMulti);
 
 #endif
-			__instance.transform.SetLocalPositionAndRotation(wrapperI.smoothedPosition, wrapperI.smoothedRotation);
+			controllerTransform.SetLocalPositionAndRotation(wrapperI.smoothedPosition, wrapperI.smoothedRotation);
 		}
 	}
 

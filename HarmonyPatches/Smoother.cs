@@ -19,7 +19,11 @@ namespace SmoothedController.HarmonyPatches {
 		public wrapper(VRController controller) {
 			controllerTransform = controller.transform;
 			var controllerName = controller.gameObject.name;
-			shouldSmooth = controllerName.Length > 0 && controllerName[0] == 'C';
+			// Menu pointers use these controllers directly; changing their pose offsets the laser.
+			shouldSmooth = controllerName.Length > 0 && controllerName[0] == 'C'
+				&& controllerTransform.Find("MenuHandle") == null;
+			smoothedPosition = controllerTransform.localPosition;
+			smoothedRotation = controllerTransform.localRotation;
 		}
 	}
 

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11709.299 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmoothedController", "SmoothedController.csproj", "{DFDCFF03-5983-AD5D-C90D-C212CF6BFA49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFDCFF03-5983-AD5D-C90D-C212CF6BFA49}.Debug|x64.ActiveCfg = Debug|x64
+		{DFDCFF03-5983-AD5D-C90D-C212CF6BFA49}.Debug|x64.Build.0 = Debug|x64
+		{DFDCFF03-5983-AD5D-C90D-C212CF6BFA49}.Release|x64.ActiveCfg = Release|x64
+		{DFDCFF03-5983-AD5D-C90D-C212CF6BFA49}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8BFF1C7-7B09-40F3-8F72-207663D80669}
+	EndGlobalSection
+EndGlobal

@@ -1,11 +1,11 @@
-﻿{
+{
     "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
     "id": "SmoothedController",
     "name": "SmoothedController",
     "author": "Kinsi55",
     "version": "0.0.4",
     "description": "Smoothes your Controller position while in menus to make it less shaky, making the UI easier to use, etc.",
-    "gameVersion": "1.45.1",
+    "gameVersion": "1.45.2",
     "dependsOn": {
         "BSIPA": "^4.0.5",
         "BeatSaberMarkupLanguage": "^1.4.5"

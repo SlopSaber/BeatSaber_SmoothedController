@@ -58,7 +58,7 @@ namespace SmoothedController.HarmonyPatches {
 			var controllerTransform = wrapperI.controllerTransform;
 			var pos = controllerTransform.localPosition;
 			var rot = controllerTransform.localRotation;
-			if(!enabled || !PluginConfig.Instance.Enabled || EasyOffsetCompatibility.IsPanelOpen) {
+			if(!enabled || !PluginConfig.Instance.Enabled || EasyOffsetCompatibility.IsPanelOpen || NalulunaAvatarsCompatibility.IsMenuOpen) {
 				wrapperI.Synchronize(pos, rot);
 				wrapperI.wasSuspended = true;
 				return;

@@ -37,6 +37,7 @@ namespace SmoothedController {
 
 		private static void HandleMainMenuInitializing() {
 			EasyOffsetCompatibility.Initialize();
+			NalulunaAvatarsCompatibility.Initialize();
 			BSMLSettings.Instance.AddSettingsMenu("Smooth Controller", "SmoothedController.UI.settings.bsml", PluginConfig.Instance);
 		}
 
@@ -44,6 +45,7 @@ namespace SmoothedController {
 		public void OnApplicationQuit() {
 			MainMenuAwaiter.MainMenuInitializing -= HandleMainMenuInitializing;
 			EasyOffsetCompatibility.Reset();
+			NalulunaAvatarsCompatibility.Reset();
 			harmony.UnpatchSelf();
 		}
 	}

@@ -20,6 +20,15 @@ namespace SmoothedController.HarmonyPatches {
 			controllerTransform = controller.transform;
 			var controllerName = controller.gameObject.name;
 			shouldSmooth = controllerName.Length > 0 && controllerName[0] == 'C';
+			Synchronize(controllerTransform.localPosition, controllerTransform.localRotation);
+		}
+
+		public bool wasSuspended;
+
+		public void Synchronize(Vector3 position, Quaternion rotation) {
+			smoothedPosition = position;
+			smoothedRotation = rotation;
+			angleVelocitySnap = 1f;
 		}
 	}
 
@@ -35,9 +44,6 @@ namespace SmoothedController.HarmonyPatches {
 			= new ConditionalWeakTable<VRController, wrapper>();
 
 		static void Postfix(VRController __instance) {
-			if(!enabled || !PluginConfig.Instance.Enabled)
-				return;
-
 			var nodeType = __instance.node;
 
 			if(nodeType != XRNode.LeftHand && nodeType != XRNode.RightHand)
@@ -52,6 +58,16 @@ namespace SmoothedController.HarmonyPatches {
 			var controllerTransform = wrapperI.controllerTransform;
 			var pos = controllerTransform.localPosition;
 			var rot = controllerTransform.localRotation;
+			if(!enabled || !PluginConfig.Instance.Enabled || EasyOffsetCompatibility.IsPanelOpen) {
+				wrapperI.Synchronize(pos, rot);
+				wrapperI.wasSuspended = true;
+				return;
+			}
+			if(wrapperI.wasSuspended) {
+				wrapperI.Synchronize(pos, rot);
+				wrapperI.wasSuspended = false;
+				return;
+			}
 
 			var angDiff = Quaternion.Angle(wrapperI.smoothedRotation, rot);
 			wrapperI.angleVelocitySnap = Math.Min(wrapperI.angleVelocitySnap + angDiff, 90f);

@@ -32,13 +32,18 @@ namespace SmoothedController {
 			harmony = new Harmony("Kinsi55.BeatSaber.SmoothedController");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-			MainMenuAwaiter.MainMenuInitializing += delegate {
-				BSMLSettings.Instance.AddSettingsMenu("Smooth Controller", "SmoothedController.UI.settings.bsml", PluginConfig.Instance);
-			};
+			MainMenuAwaiter.MainMenuInitializing += HandleMainMenuInitializing;
+		}
+
+		private static void HandleMainMenuInitializing() {
+			EasyOffsetCompatibility.Initialize();
+			BSMLSettings.Instance.AddSettingsMenu("Smooth Controller", "SmoothedController.UI.settings.bsml", PluginConfig.Instance);
 		}
 
 		[OnExit]
 		public void OnApplicationQuit() {
+			MainMenuAwaiter.MainMenuInitializing -= HandleMainMenuInitializing;
+			EasyOffsetCompatibility.Reset();
 			harmony.UnpatchSelf();
 		}
 	}
